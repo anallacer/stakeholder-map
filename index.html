@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-dimensional Stakeholder Assessment</title>
+<style>
+:root{--text:#1f2937;--muted:#6b7280;--border:#d1d5db;--ux:#4f81bd;--access:#8064a2;--public:#70ad47;--user:#f4a742}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}
+.wrap{max-width:1180px;margin:auto;padding:28px 20px 40px}.sub{color:var(--muted);margin:6px 0 22px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.card,.note{border:1px solid var(--border);border-radius:14px;background:#fff;padding:16px}.chart-wrap{overflow-x:auto}
+svg{width:100%;min-width:680px;display:block}.legend{display:flex;flex-wrap:wrap;gap:12px 18px;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend-item{display:flex;align-items:center;gap:6px}.dot{width:12px;height:12px;border-radius:50%}
+label{display:block;margin-top:14px;font-size:14px;font-weight:600}select,input[type=range]{width:100%;margin-top:6px}
+select{padding:9px;border:1px solid var(--border);border-radius:8px;background:white;font-size:15px}
+.profile{margin-top:14px;padding:12px;border:1px solid var(--border);border-radius:10px;background:#f7f7f8;font-size:14px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-top:12px}
+button{width:100%;margin-top:16px;padding:10px;border:0;border-radius:8px;background:#eef2ff;font-weight:600;cursor:pointer}
+.note{margin-top:18px}.note h2{font-size:18px;margin:0 0 8px}.note p{margin:6px 0;color:var(--muted);font-size:14px}
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.quad-grid div{border:1px solid var(--border);border-radius:10px;padding:12px;background:#f7f7f8}
+.small{font-size:12px;color:var(--muted)}.bubble{cursor:pointer}.bubble.selected{stroke:#111827;stroke-width:4}
+.bubble-label{pointer-events:none;font-size:11px;font-weight:700;fill:#1f2937;paint-order:stroke;stroke:white;stroke-width:3px;stroke-linejoin:round}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.quad-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Multi-dimensional Stakeholder Assessment</h1>
+<div class="sub">Position = organisational decision-making power × accessibility knowledge / experiential expertise · Bubble size = mobilisation capacity</div>
+
+<div class="layout">
+<div class="card">
+<div class="chart-wrap">
+<svg id="chart" viewBox="0 0 760 590" role="img" aria-label="Stakeholder map"></svg>
+</div>
+<div class="legend">
+<span class="legend-item"><span class="dot" style="background:var(--ux)"></span>UX, Design & Industry</span>
+<span class="legend-item"><span class="dot" style="background:var(--access)"></span>Accessibility & Advocacy</span>
+<span class="legend-item"><span class="dot" style="background:var(--public)"></span>Public, Research & Community</span>
+<span class="legend-item"><span class="dot" style="background:var(--user)"></span>People with disabilities</span>
+</div>
+</div>
+
+<div class="card">
+<strong>Review a participant</strong>
+<div class="small">Scores are interpretive and can be adjusted locally.</div>
+<label for="participantSelect">Participant</label>
+<select id="participantSelect"></select>
+<div id="profile" class="profile"></div>
+<div class="row"><span>Decision-making power</span><strong id="xValue"></strong></div>
+<input id="xSlider" type="range" min="1" max="5" step="1">
+<div class="row"><span>Accessibility / experiential expertise</span><strong id="yValue"></strong></div>
+<input id="ySlider" type="range" min="1" max="5" step="1">
+<div class="row"><span>Mobilisation capacity</span><strong id="mValue"></strong></div>
+<input id="mSlider" type="range" min="1" max="5" step="1">
+<button id="resetBtn" type="button">Reset proposed scores</button>
+</div>
+</div>
+
+<div class="note">
+<h2>Interpretation</h2>
+<div class="quad-grid">
+<div><strong>High expertise · High power</strong><br><span class="small">Strategic accessibility actors.</span></div>
+<div><strong>High expertise · Low power</strong><br><span class="small">Knowledge-rich but power-constrained actors.</span></div>
+<div><strong>Lower expertise · High power</strong><br><span class="small">Potential organisational enablers; senior decision-makers were underrepresented.</span></div>
+<div><strong>Lower expertise · Low power</strong><br><span class="small">Peripheral actors with limited influence and specialist or experiential knowledge.</span></div>
+</div>
+</div>
+
+<div class="note">
+<h2>Suggested thesis caption</h2>
+<p><em>Figure X. Multi-dimensional stakeholder assessment based on the qualitative interviews. The horizontal axis represents organisational decision-making power; the vertical axis represents accessibility knowledge and/or experiential expertise; bubble size represents mobilisation capacity. Colours indicate stakeholder categories. Scores from 1 to 5 are interpretive and are intended to compare relative positions rather than provide objective measurements. The comparatively empty high-power/lower-expertise quadrant also reflects the limited representation of senior organisational decision-makers in the interview sample.</em></p>
+</div>
+</div>
+
+<script>
+const initial=[
+{id:'P1',role:'Senior UX Designer & Researcher',cat:'ux',x:2,y:3,m:2},
+{id:'P2',role:'UX Researcher & Lecturer',cat:'ux',x:2,y:3,m:3},
+{id:'P3',role:'Inclusive Design Consultant',cat:'access',x:4,y:5,m:5},
+{id:'P4',role:'Research Engineer',cat:'public',x:2,y:3,m:2},
+{id:'P5',role:'Accessibility UX Designer',cat:'ux',x:3,y:5,m:4},
+{id:'P6',role:'Association Coordinator',cat:'public',x:3,y:4,m:3},
+{id:'P7',role:'Inclusive Designer / FabLab Manager',cat:'public',x:3,y:4,m:3},
+{id:'P8',role:'Motor-disabled user',cat:'user',x:1,y:4,m:3},
+{id:'P9',role:'Digital Accessibility Officer',cat:'public',x:4,y:5,m:5},
+{id:'P10',role:'Inclusive Research Agency Director',cat:'access',x:4,y:5,m:5},
+{id:'P11',role:'Senior UX Researcher',cat:'ux',x:2,y:4,m:3},
+{id:'P12',role:'Digital Accessibility Expert',cat:'access',x:4,y:5,m:5},
+{id:'P13',role:'Blind and autistic user',cat:'user',x:1,y:5,m:2},
+{id:'P14',role:'Local Inclusion Coordinator / Panel Leader',cat:'public',x:4,y:4,m:4},
+{id:'P15',role:'Accessibility & Disability Policy Expert',cat:'access',x:4,y:5,m:5},
+{id:'P16',role:'Autistic user',cat:'user',x:1,y:4,m:1},
+{id:'P17',role:'Autistic / ADHD / motor-disabled user',cat:'user',x:1,y:4,m:1},
+{id:'P18',role:'Blind accessibility evaluator',cat:'user',x:2,y:5,m:3}
+];
+let data=initial.map(d=>({...d})),selected='P3';
+const svg=document.getElementById('chart'),select=document.getElementById('participantSelect'),profile=document.getElementById('profile');
+const xs=document.getElementById('xSlider'),ys=document.getElementById('ySlider'),ms=document.getElementById('mSlider');
+const xv=document.getElementById('xValue'),yv=document.getElementById('yValue'),mv=document.getElementById('mValue');
+const colors={ux:'#4f81bd',access:'#8064a2',public:'#70ad47',user:'#f4a742'};
+const cats={ux:'UX, Design & Industry',access:'Accessibility & Advocacy',public:'Public, Research & Community',user:'People with disabilities'};
+data.forEach(d=>{let o=document.createElement('option');o.value=d.id;o.textContent=`${d.id} — ${d.role}`;select.appendChild(o)});
+function E(name,a={}){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(a))n.setAttribute(k,v);return n}
+function render(){
+ while(svg.firstChild)svg.removeChild(svg.firstChild);
+ const L=85,R=720,T=45,B=510,W=R-L,H=B-T,sx=v=>L+(v-1)/4*W,sy=v=>B-(v-1)/4*H;
+ svg.appendChild(E('rect',{x:L,y:T,width:W,height:H,rx:10,fill:'#fff'}));
+ [[L,T,W/2,H/2,'#fef3c7'],[L+W/2,T,W/2,H/2,'#dcfce7'],[L,T+H/2,W/2,H/2,'#f3f4f6'],[L+W/2,T+H/2,W/2,H/2,'#dbeafe']].forEach(q=>svg.appendChild(E('rect',{x:q[0],y:q[1],width:q[2],height:q[3],fill:q[4],opacity:.34})));
+ for(let i=1;i<=5;i++){const x=sx(i),y=sy(i);svg.appendChild(E('line',{x1:x,y1:T,x2:x,y2:B,stroke:'#e5e7eb'}));svg.appendChild(E('line',{x1:L,y1:y,x2:R,y2:y,stroke:'#e5e7eb'}));let tx=E('text',{x,y:B+24,'text-anchor':'middle',fill:'#6b7280','font-size':12});tx.textContent=i;svg.appendChild(tx);let ty=E('text',{x:L-20,y:y+4,'text-anchor':'middle',fill:'#6b7280','font-size':12});ty.textContent=i;svg.appendChild(ty)}
+ svg.appendChild(E('line',{x1:sx(3),y1:T,x2:sx(3),y2:B,stroke:'#9ca3af','stroke-dasharray':'6 5'}));
+ svg.appendChild(E('line',{x1:L,y1:sy(3),x2:R,y2:sy(3),stroke:'#9ca3af','stroke-dasharray':'6 5'}));
+ [['Knowledge-rich / power-constrained',L+12,T+20],['Strategic accessibility actors',L+W/2+12,T+20],['Peripheral actors',L+12,T+H/2+22],['Potential organisational enablers',L+W/2+12,T+H/2+22]].forEach(n=>{let t=E('text',{x:n[1],y:n[2],fill:'#6b7280','font-size':11,'font-weight':600});t.textContent=n[0];svg.appendChild(t)});
+ const g={};data.forEach(d=>(g[`${d.x}-${d.y}`]??=[]).push(d));
+ Object.values(g).forEach(gr=>gr.forEach((d,i)=>{const spread=gr.length>1?(i-(gr.length-1)/2)*20:0,cx=sx(d.x)+spread,cy=sy(d.y)+(gr.length>2&&i%2?10:-4),r=9+d.m*3;let c=E('circle',{cx,cy,r,fill:colors[d.cat],opacity:.82,stroke:'#fff','stroke-width':2,tabindex:0});c.classList.add('bubble');if(d.id===selected)c.classList.add('selected');c.addEventListener('click',()=>choose(d.id));svg.appendChild(c);let t=E('text',{x:cx,y:cy+3,'text-anchor':'middle',class:'bubble-label'});t.textContent=d.id;svg.appendChild(t)}));
+ let xl=E('text',{x:(L+R)/2,y:565,'text-anchor':'middle',fill:'#111827','font-size':13,'font-weight':600});xl.textContent='Organisational decision-making power →';svg.appendChild(xl);
+ let yl=E('text',{x:22,y:(T+B)/2,transform:`rotate(-90 22 ${(T+B)/2})`,'text-anchor':'middle',fill:'#111827','font-size':13,'font-weight':600});yl.textContent='Accessibility knowledge / experiential expertise →';svg.appendChild(yl);
+}
+function update(){const d=data.find(v=>v.id===selected);xs.value=d.x;ys.value=d.y;ms.value=d.m;xv.textContent=d.x+'/5';yv.textContent=d.y+'/5';mv.textContent=d.m+'/5';profile.innerHTML=`<strong>${d.id}</strong><div style="margin-top:4px;color:#6b7280">${d.role}</div><div style="margin-top:8px;font-size:12px;color:#6b7280">${cats[d.cat]}</div>`}
+function choose(id){selected=id;select.value=id;update();render()}
+function adjust(){const d=data.find(v=>v.id===selected);d.x=+xs.value;d.y=+ys.value;d.m=+ms.value;update();render()}
+[xs,ys,ms].forEach(s=>s.addEventListener('input',adjust));select.addEventListener('change',()=>choose(select.value));
+document.getElementById('resetBtn').addEventListener('click',()=>{data=initial.map(d=>({...d}));choose('P3')});
+choose(selected);
+</script>
+</body>
+</html>
