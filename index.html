@@ -1,128 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Multi-dimensional Stakeholder Assessment</title>
 <style>
-:root{--text:#1f2937;--muted:#6b7280;--border:#d1d5db;--ux:#4f81bd;--access:#8064a2;--public:#70ad47;--user:#f4a742}
+:root{--text:#1f2937;--muted:#6b7280;--border:#d9dee7;--panel:#fff;--card:#f8fafc;--accent:#2563eb;--accent-bg:#eef2ff;--blue:#4F86C6;--purple:#8064A2;--green:#6BAD45;--orange:#F4A23A}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}
-.wrap{max-width:1180px;margin:auto;padding:28px 20px 40px}.sub{color:var(--muted);margin:6px 0 22px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
-.card,.note{border:1px solid var(--border);border-radius:14px;background:#fff;padding:16px}.chart-wrap{overflow-x:auto}
-svg{width:100%;min-width:680px;display:block}.legend{display:flex;flex-wrap:wrap;gap:12px 18px;margin-top:14px;font-size:13px;color:var(--muted)}
-.legend-item{display:flex;align-items:center;gap:6px}.dot{width:12px;height:12px;border-radius:50%}
-label{display:block;margin-top:14px;font-size:14px;font-weight:600}select,input[type=range]{width:100%;margin-top:6px}
-select{padding:9px;border:1px solid var(--border);border-radius:8px;background:white;font-size:15px}
-.profile{margin-top:14px;padding:12px;border:1px solid var(--border);border-radius:10px;background:#f7f7f8;font-size:14px}
-.row{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-top:12px}
-button{width:100%;margin-top:16px;padding:10px;border:0;border-radius:8px;background:#eef2ff;font-weight:600;cursor:pointer}
-.note{margin-top:18px}.note h2{font-size:18px;margin:0 0 8px}.note p{margin:6px 0;color:var(--muted);font-size:14px}
-.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.quad-grid div{border:1px solid var(--border);border-radius:10px;padding:12px;background:#f7f7f8}
-.small{font-size:12px;color:var(--muted)}.bubble{cursor:pointer}.bubble.selected{stroke:#111827;stroke-width:4}
-.bubble-label{pointer-events:none;font-size:11px;font-weight:700;fill:#1f2937;paint-order:stroke;stroke:white;stroke-width:3px;stroke-linejoin:round}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.quad-grid{grid-template-columns:1fr}}
+.wrap{max-width:1180px;margin:0 auto;padding:24px} h1{font-size:34px;line-height:1.1;margin:0 0 10px;font-weight:700}
+.subtitle{font-size:16px;color:var(--muted);margin-bottom:22px}
+.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;align-items:start}
+.panel{border:1px solid var(--border);border-radius:16px;background:var(--panel)} .chart-panel{padding:12px;overflow:auto}
+svg{display:block;width:100%;min-width:720px;height:auto}.review{padding:16px}.review h2{font-size:20px;margin:0 0 3px}.small{font-size:12px;color:var(--muted)}
+label{display:block;font-size:14px;margin-top:16px} select{width:100%;margin-top:6px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:16px;background:white}
+.participant-card{margin-top:12px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.participant-card .id{font-weight:700}.participant-card .label{margin-top:4px;color:var(--muted);font-size:14px}.participant-card .type{margin-top:8px;color:var(--muted);font-size:12px}
+.range-row{margin-top:16px}.range-label{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:4px} input[type=range]{width:100%}
+button{width:100%;min-height:44px;margin-top:20px;border:0;border-radius:12px;background:var(--accent-bg);font-weight:700;font-size:14px;cursor:pointer}
+.interpretation{margin-top:20px;padding:16px}.interpretation h2{font-size:20px;margin:0 0 12px}
+.interpretation-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;grid-auto-flow:column;gap:12px}
+.interp-card{min-height:112px;border:1px solid var(--border);border-radius:12px;background:var(--card);padding:16px;display:flex;flex-direction:column}
+.interp-card h3{font-size:15px;line-height:1.35;margin:0}.interp-card p{font-size:12px;line-height:1.55;color:var(--muted);margin:8px 0 0}
+@media(max-width:800px){.main-layout{grid-template-columns:1fr}.interpretation-grid{grid-template-columns:1fr;grid-template-rows:auto;grid-auto-flow:row}.wrap{padding:14px}h1{font-size:28px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>Multi-dimensional Stakeholder Assessment</h1>
-<div class="sub">Position = organisational decision-making power × accessibility knowledge / experiential expertise · Bubble size = mobilisation capacity</div>
+<div class="subtitle">Position = organisational decision-making power × accessibility knowledge / experiential expertise · Bubble size = mobilisation / ecosystem influence</div>
 
-<div class="layout">
-<div class="card">
-<div class="chart-wrap">
-<svg id="chart" viewBox="0 0 760 590" role="img" aria-label="Stakeholder map"></svg>
-</div>
-<div class="legend">
-<span class="legend-item"><span class="dot" style="background:var(--ux)"></span>UX, Design & Industry</span>
-<span class="legend-item"><span class="dot" style="background:var(--access)"></span>Accessibility & Advocacy</span>
-<span class="legend-item"><span class="dot" style="background:var(--public)"></span>Public, Research & Community</span>
-<span class="legend-item"><span class="dot" style="background:var(--user)"></span>People with disabilities</span>
-</div>
+<div class="main-layout">
+<section class="panel chart-panel">
+<svg id="msa-svg" viewBox="0 0 920 700" role="img" aria-label="Multi-dimensional stakeholder assessment chart">
+<rect x="112" y="42" width="735" height="500" rx="4" fill="#ffffff" stroke="#d9dee7"/>
+<rect x="112" y="42" width="367.5" height="250" fill="#fff9e9"/><rect x="479.5" y="42" width="367.5" height="250" fill="#effbf1"/>
+<rect x="112" y="292" width="367.5" height="250" fill="#fafafa"/><rect x="479.5" y="292" width="367.5" height="250" fill="#eef5ff"/>
+<line x1="479.5" y1="42" x2="479.5" y2="542" stroke="#98a4b3" stroke-dasharray="6 5"/><line x1="112" y1="292" x2="847" y2="292" stroke="#98a4b3" stroke-dasharray="6 5"/>
+<g stroke="#d9dee7"><line x1="112" y1="417" x2="847" y2="417"/><line x1="112" y1="542" x2="847" y2="542"/><line x1="296" y1="42" x2="296" y2="542"/><line x1="664" y1="42" x2="664" y2="542"/><line x1="847" y1="42" x2="847" y2="542"/></g>
+<g font-size="12.5" fill="#6b7280"><text x="126" y="66">Knowledge-rich / power-constrained</text><text x="492" y="66">Embedded accessibility leaders</text><text x="492" y="85">Expertise combined with direct organisational authority</text><text x="126" y="316">Peripheral actors</text><text x="492" y="316">Organisational enablers</text><text x="492" y="335">Potential authority, but lower accessibility expertise</text></g>
+<g font-size="12" fill="#6b7280"><text x="106" y="568">1</text><text x="289" y="568">2</text><text x="473" y="568">3</text><text x="657" y="568">4</text><text x="840" y="568">5</text><text x="85" y="546">1</text><text x="85" y="421">2</text><text x="85" y="296">3</text><text x="85" y="171">4</text><text x="85" y="47">5</text></g>
+<text x="479.5" y="607" text-anchor="middle" font-size="15" font-weight="700">Organisational decision-making power →</text>
+<text x="36" y="292" text-anchor="middle" font-size="15" font-weight="700" transform="rotate(-90 36 292)">Accessibility knowledge / experiential expertise →</text>
+<g id="msa-bubbles"></g>
+<g transform="translate(25 650)" font-size="12.5" fill="#6b7280"><circle cx="0" cy="0" r="6" fill="#4F86C6"/><text x="12" y="4">UX, Design &amp; Industry</text><circle cx="190" cy="0" r="6" fill="#8064A2"/><text x="202" y="4">Accessibility &amp; Advocacy</text><circle cx="420" cy="0" r="6" fill="#6BAD45"/><text x="432" y="4">Public, Research &amp; Community</text><circle cx="690" cy="0" r="6" fill="#F4A23A"/><text x="702" y="4">People with disabilities</text></g>
+</svg>
+</section>
+
+<aside class="panel review">
+<h2>Review a participant</h2><div class="small">Scores are interpretive and can be adjusted locally.</div>
+<label for="msa-select"><strong>Participant</strong></label><select id="msa-select"></select>
+<div id="msa-card" class="participant-card"></div>
+<div class="range-row"><div class="range-label"><span>Decision-making power</span><strong id="power-val"></strong></div><input id="power-range" type="range" min="1" max="5" step="0.5"></div>
+<div class="range-row"><div class="range-label"><span>Accessibility / experiential expertise</span><strong id="expertise-val"></strong></div><input id="expertise-range" type="range" min="1" max="5" step="0.5"></div>
+<div class="range-row"><div class="range-label"><span>Mobilisation / ecosystem influence</span><strong id="mobilisation-val"></strong></div><input id="mobilisation-range" type="range" min="1" max="5" step="0.5"></div>
+<button id="msa-reset" type="button">Reset proposed scores</button>
+</aside>
 </div>
 
-<div class="card">
-<strong>Review a participant</strong>
-<div class="small">Scores are interpretive and can be adjusted locally.</div>
-<label for="participantSelect">Participant</label>
-<select id="participantSelect"></select>
-<div id="profile" class="profile"></div>
-<div class="row"><span>Decision-making power</span><strong id="xValue"></strong></div>
-<input id="xSlider" type="range" min="1" max="5" step="1">
-<div class="row"><span>Accessibility / experiential expertise</span><strong id="yValue"></strong></div>
-<input id="ySlider" type="range" min="1" max="5" step="1">
-<div class="row"><span>Mobilisation capacity</span><strong id="mValue"></strong></div>
-<input id="mSlider" type="range" min="1" max="5" step="1">
-<button id="resetBtn" type="button">Reset proposed scores</button>
-</div>
-</div>
-
-<div class="note">
+<section class="panel interpretation">
 <h2>Interpretation</h2>
-<div class="quad-grid">
-<div><strong>High expertise · High power</strong><br><span class="small">Strategic accessibility actors.</span></div>
-<div><strong>High expertise · Low power</strong><br><span class="small">Knowledge-rich but power-constrained actors.</span></div>
-<div><strong>Lower expertise · High power</strong><br><span class="small">Potential organisational enablers; senior decision-makers were underrepresented.</span></div>
-<div><strong>Lower expertise · Low power</strong><br><span class="small">Peripheral actors with limited influence and specialist or experiential knowledge.</span></div>
+<div class="interpretation-grid">
+<div class="interp-card"><h3>High expertise · High power</h3><p>Embedded accessibility leaders combining specialist knowledge with direct organisational authority.</p></div>
+<div class="interp-card"><h3>Lower expertise · High power</h3><p>Organisational enablers with potential authority over priorities and resources; senior decision-makers were underrepresented in the sample.</p></div>
+<div class="interp-card"><h3>High expertise · Low power</h3><p>Knowledge-rich but power-constrained actors, including advocates and specialists with strong ecosystem influence but limited control over company budgets or product priorities.</p></div>
+<div class="interp-card"><h3>Lower expertise · Low power</h3><p>Peripheral actors with limited organisational influence and more limited specialist or experiential accessibility knowledge.</p></div>
 </div>
-</div>
-
-<div class="note">
-<h2>Suggested thesis caption</h2>
-<p><em>Figure X. Multi-dimensional stakeholder assessment based on the qualitative interviews. The horizontal axis represents organisational decision-making power; the vertical axis represents accessibility knowledge and/or experiential expertise; bubble size represents mobilisation capacity. Colours indicate stakeholder categories. Scores from 1 to 5 are interpretive and are intended to compare relative positions rather than provide objective measurements. The comparatively empty high-power/lower-expertise quadrant also reflects the limited representation of senior organisational decision-makers in the interview sample.</em></p>
-</div>
+</section>
 </div>
 
 <script>
-const initial=[
-{id:'P1',role:'Senior UX Designer & Researcher',cat:'ux',x:2,y:3,m:2},
-{id:'P2',role:'UX Researcher & Lecturer',cat:'ux',x:2,y:3,m:3},
-{id:'P3',role:'Inclusive Design Consultant',cat:'access',x:4,y:5,m:5},
-{id:'P4',role:'Research Engineer',cat:'public',x:2,y:3,m:2},
-{id:'P5',role:'Accessibility UX Designer',cat:'ux',x:3,y:5,m:4},
-{id:'P6',role:'Association Coordinator',cat:'public',x:3,y:4,m:3},
-{id:'P7',role:'Inclusive Designer / FabLab Manager',cat:'public',x:3,y:4,m:3},
-{id:'P8',role:'Motor-disabled user',cat:'user',x:1,y:4,m:3},
-{id:'P9',role:'Digital Accessibility Officer',cat:'public',x:4,y:5,m:5},
-{id:'P10',role:'Inclusive Research Agency Director',cat:'access',x:4,y:5,m:5},
-{id:'P11',role:'Senior UX Researcher',cat:'ux',x:2,y:4,m:3},
-{id:'P12',role:'Digital Accessibility Expert',cat:'access',x:4,y:5,m:5},
-{id:'P13',role:'Blind and autistic user',cat:'user',x:1,y:5,m:2},
-{id:'P14',role:'Local Inclusion Coordinator / Panel Leader',cat:'public',x:4,y:4,m:4},
-{id:'P15',role:'Accessibility & Disability Policy Expert',cat:'access',x:4,y:5,m:5},
-{id:'P16',role:'Autistic user',cat:'user',x:1,y:4,m:1},
-{id:'P17',role:'Autistic / ADHD / motor-disabled user',cat:'user',x:1,y:4,m:1},
-{id:'P18',role:'Blind accessibility evaluator',cat:'user',x:2,y:5,m:3}
+(() => {
+const defaults=[
+{id:'P1',label:'Senior UX Designer & Researcher',cat:'ux',x:1.85,y:3,m:2},{id:'P2',label:'UX Researcher',cat:'ux',x:2,y:2.9,m:3},{id:'P3',label:'Inclusive Design Consultant',cat:'access',x:2.45,y:5,m:5},{id:'P4',label:'Research Engineer',cat:'public',x:2.15,y:3,m:2},{id:'P5',label:'Accessibility UX Designer',cat:'ux',x:3,y:5,m:4},{id:'P6',label:'Association Coordinator',cat:'public',x:2.95,y:4,m:3},{id:'P7',label:'Inclusive Designer',cat:'public',x:3.08,y:4,m:3},{id:'P8',label:'Motor Disability User',cat:'pwd',x:1,y:4,m:3},{id:'P9',label:'Digital Accessibility Officer',cat:'public',x:3.8,y:5,m:5},{id:'P10',label:'Inclusive Research Expert',cat:'access',x:2.6,y:5,m:5},{id:'P11',label:'Accessibility UX Researcher',cat:'ux',x:2,y:4,m:3},{id:'P12',label:'Digital Accessibility Expert',cat:'access',x:2.25,y:5,m:5},{id:'P13',label:'Blind & Autist User',cat:'pwd',x:1,y:5,m:2},{id:'P14',label:'Diversity & Inclusion Officer',cat:'public',x:4,y:4,m:4},{id:'P15',label:'Accessibility & Policy Expert',cat:'access',x:2.78,y:4.9,m:5},{id:'P16',label:'Autist User',cat:'pwd',x:1,y:4,m:1},{id:'P17',label:'Motor, ADHD & ASD User',cat:'pwd',x:1,y:4,m:1},{id:'P18',label:'Blind Accessibility Evaluator',cat:'pwd',x:2,y:5,m:3}
 ];
-let data=initial.map(d=>({...d})),selected='P3';
-const svg=document.getElementById('chart'),select=document.getElementById('participantSelect'),profile=document.getElementById('profile');
-const xs=document.getElementById('xSlider'),ys=document.getElementById('ySlider'),ms=document.getElementById('mSlider');
-const xv=document.getElementById('xValue'),yv=document.getElementById('yValue'),mv=document.getElementById('mValue');
-const colors={ux:'#4f81bd',access:'#8064a2',public:'#70ad47',user:'#f4a742'};
-const cats={ux:'UX, Design & Industry',access:'Accessibility & Advocacy',public:'Public, Research & Community',user:'People with disabilities'};
-data.forEach(d=>{let o=document.createElement('option');o.value=d.id;o.textContent=`${d.id} — ${d.role}`;select.appendChild(o)});
-function E(name,a={}){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(a))n.setAttribute(k,v);return n}
-function render(){
- while(svg.firstChild)svg.removeChild(svg.firstChild);
- const L=85,R=720,T=45,B=510,W=R-L,H=B-T,sx=v=>L+(v-1)/4*W,sy=v=>B-(v-1)/4*H;
- svg.appendChild(E('rect',{x:L,y:T,width:W,height:H,rx:10,fill:'#fff'}));
- [[L,T,W/2,H/2,'#fef3c7'],[L+W/2,T,W/2,H/2,'#dcfce7'],[L,T+H/2,W/2,H/2,'#f3f4f6'],[L+W/2,T+H/2,W/2,H/2,'#dbeafe']].forEach(q=>svg.appendChild(E('rect',{x:q[0],y:q[1],width:q[2],height:q[3],fill:q[4],opacity:.34})));
- for(let i=1;i<=5;i++){const x=sx(i),y=sy(i);svg.appendChild(E('line',{x1:x,y1:T,x2:x,y2:B,stroke:'#e5e7eb'}));svg.appendChild(E('line',{x1:L,y1:y,x2:R,y2:y,stroke:'#e5e7eb'}));let tx=E('text',{x,y:B+24,'text-anchor':'middle',fill:'#6b7280','font-size':12});tx.textContent=i;svg.appendChild(tx);let ty=E('text',{x:L-20,y:y+4,'text-anchor':'middle',fill:'#6b7280','font-size':12});ty.textContent=i;svg.appendChild(ty)}
- svg.appendChild(E('line',{x1:sx(3),y1:T,x2:sx(3),y2:B,stroke:'#9ca3af','stroke-dasharray':'6 5'}));
- svg.appendChild(E('line',{x1:L,y1:sy(3),x2:R,y2:sy(3),stroke:'#9ca3af','stroke-dasharray':'6 5'}));
- [['Knowledge-rich / power-constrained',L+12,T+20],['Strategic accessibility actors',L+W/2+12,T+20],['Peripheral actors',L+12,T+H/2+22],['Potential organisational enablers',L+W/2+12,T+H/2+22]].forEach(n=>{let t=E('text',{x:n[1],y:n[2],fill:'#6b7280','font-size':11,'font-weight':600});t.textContent=n[0];svg.appendChild(t)});
- const g={};data.forEach(d=>(g[`${d.x}-${d.y}`]??=[]).push(d));
- Object.values(g).forEach(gr=>gr.forEach((d,i)=>{const spread=gr.length>1?(i-(gr.length-1)/2)*20:0,cx=sx(d.x)+spread,cy=sy(d.y)+(gr.length>2&&i%2?10:-4),r=9+d.m*3;let c=E('circle',{cx,cy,r,fill:colors[d.cat],opacity:.82,stroke:'#fff','stroke-width':2,tabindex:0});c.classList.add('bubble');if(d.id===selected)c.classList.add('selected');c.addEventListener('click',()=>choose(d.id));svg.appendChild(c);let t=E('text',{x:cx,y:cy+3,'text-anchor':'middle',class:'bubble-label'});t.textContent=d.id;svg.appendChild(t)}));
- let xl=E('text',{x:(L+R)/2,y:565,'text-anchor':'middle',fill:'#111827','font-size':13,'font-weight':600});xl.textContent='Organisational decision-making power →';svg.appendChild(xl);
- let yl=E('text',{x:22,y:(T+B)/2,transform:`rotate(-90 22 ${(T+B)/2})`,'text-anchor':'middle',fill:'#111827','font-size':13,'font-weight':600});yl.textContent='Accessibility knowledge / experiential expertise →';svg.appendChild(yl);
-}
-function update(){const d=data.find(v=>v.id===selected);xs.value=d.x;ys.value=d.y;ms.value=d.m;xv.textContent=d.x+'/5';yv.textContent=d.y+'/5';mv.textContent=d.m+'/5';profile.innerHTML=`<strong>${d.id}</strong><div style="margin-top:4px;color:#6b7280">${d.role}</div><div style="margin-top:8px;font-size:12px;color:#6b7280">${cats[d.cat]}</div>`}
-function choose(id){selected=id;select.value=id;update();render()}
-function adjust(){const d=data.find(v=>v.id===selected);d.x=+xs.value;d.y=+ys.value;d.m=+ms.value;update();render()}
-[xs,ys,ms].forEach(s=>s.addEventListener('input',adjust));select.addEventListener('change',()=>choose(select.value));
-document.getElementById('resetBtn').addEventListener('click',()=>{data=initial.map(d=>({...d}));choose('P3')});
-choose(selected);
+let data=defaults.map(d=>({...d}));
+const svgNS='http://www.w3.org/2000/svg',colors={ux:'#4F86C6',access:'#8064A2',public:'#6BAD45',pwd:'#F4A23A'},typeLabel={ux:'UX, Design & Industry',access:'Accessibility & Advocacy',public:'Public, Research & Community',pwd:'People with disabilities'};
+const xPos=v=>112+((v-1)/4)*735,yPos=v=>542-((v-1)/4)*500,radius=v=>10+v*3.7;
+const offsets={P1:[-14,0],P2:[0,14],P3:[-22,8],P4:[0,-5],P5:[0,0],P6:[-10,0],P7:[11,0],P8:[-20,-6],P9:[0,5],P10:[4,-7],P11:[0,0],P12:[-3,10],P13:[0,-4],P14:[0,0],P15:[20,17],P16:[0,15],P17:[25,-2],P18:[0,-4]};
+const select=document.getElementById('msa-select'),card=document.getElementById('msa-card'),group=document.getElementById('msa-bubbles'),power=document.getElementById('power-range'),expertise=document.getElementById('expertise-range'),mobilisation=document.getElementById('mobilisation-range'),powerVal=document.getElementById('power-val'),expertiseVal=document.getElementById('expertise-val'),mobilisationVal=document.getElementById('mobilisation-val'),reset=document.getElementById('msa-reset');
+const fmt=v=>Number(v)%1===0?String(Number(v)):Number(v).toFixed(1),current=()=>data.find(d=>d.id===select.value)||data[0];
+function draw(selected){group.innerHTML='';data.forEach(d=>{const [dx,dy]=offsets[d.id]||[0,0],cx=xPos(d.x)+dx,cy=yPos(d.y)+dy,g=document.createElementNS(svgNS,'g');g.setAttribute('tabindex','0');g.setAttribute('role','button');g.style.cursor='pointer';g.setAttribute('aria-label',`${d.id} ${d.label}`);const c=document.createElementNS(svgNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',radius(d.m));c.setAttribute('fill',colors[d.cat]);c.setAttribute('fill-opacity','0.84');c.setAttribute('stroke',selected===d.id?'#2563eb':'white');c.setAttribute('stroke-width',selected===d.id?'4':'2');g.appendChild(c);const t=document.createElementNS(svgNS,'text');t.setAttribute('x',cx);t.setAttribute('y',cy+4);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','11');t.setAttribute('font-weight','700');t.setAttribute('fill','white');t.textContent=d.id;g.appendChild(t);const choose=()=>{select.value=d.id;syncPanel()};g.addEventListener('click',choose);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});group.appendChild(g)})}
+function syncPanel(){const d=current();power.value=d.x;expertise.value=d.y;mobilisation.value=d.m;powerVal.textContent=`${fmt(d.x)}/5`;expertiseVal.textContent=`${fmt(d.y)}/5`;mobilisationVal.textContent=`${fmt(d.m)}/5`;card.innerHTML=`<div class="id">${d.id}</div><div class="label">${d.label}</div><div class="type">${typeLabel[d.cat]}</div>`;draw(d.id)}
+function update(){const d=current();d.x=Number(power.value);d.y=Number(expertise.value);d.m=Number(mobilisation.value);powerVal.textContent=`${fmt(d.x)}/5`;expertiseVal.textContent=`${fmt(d.y)}/5`;mobilisationVal.textContent=`${fmt(d.m)}/5`;draw(d.id)}
+defaults.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=`${d.id} — ${d.label}`;select.appendChild(o)});
+select.addEventListener('change',syncPanel);power.addEventListener('input',update);expertise.addEventListener('input',update);mobilisation.addEventListener('input',update);reset.addEventListener('click',()=>{data=defaults.map(d=>({...d}));syncPanel()});select.value='P1';syncPanel();
+})();
 </script>
 </body>
 </html>
